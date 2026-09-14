@@ -1,0 +1,242 @@
+=== convnexttiny ===
+  [run ] prepare
+/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+backbone: convnexttiny @ 224px -> artifacts/convnexttiny
+manifest: 9869 images, 20 camera-directions, 2023-12-22 -> 2026-01-02
+
+split sizes:
+class_3  high  light  no_traffic
+split                           
+test      104    557         750
+train    1108   2659        2313
+val       581    789        1008
+Traceback (most recent call last):
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 184, in <module>
+    main()
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 154, in main
+    import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/__init__.py", line 7, in <module>
+    from keras import _tf_keras as _tf_keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/__init__.py", line 1, in <module>
+    from keras._tf_keras import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/keras/__init__.py", line 7, in <module>
+    from keras import activations as activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/activations/__init__.py", line 7, in <module>
+    from keras.src.activations import deserialize as deserialize
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/__init__.py", line 1, in <module>
+    from keras.src import activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/__init__.py", line 3, in <module>
+    from keras.src.activations.activations import celu
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/activations.py", line 1, in <module>
+    from keras.src import backend
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/__init__.py", line 10, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/__init__.py", line 2, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/dtypes.py", line 5, in <module>
+    from keras.src.backend.common.variables import standardize_dtype
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/variables.py", line 11, in <module>
+    from keras.src.utils.module_utils import tensorflow as tf
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/__init__.py", line 1, in <module>
+    from keras.src.utils.audio_dataset_utils import audio_dataset_from_directory
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/audio_dataset_utils.py", line 4, in <module>
+    from keras.src.utils import dataset_utils
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/dataset_utils.py", line 9, in <module>
+    from keras.src import tree
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/__init__.py", line 1, in <module>
+    from keras.src.tree.tree_api import assert_same_paths
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/tree_api.py", line 8, in <module>
+    from keras.src.tree import optree_impl as tree_impl
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/optree_impl.py", line 13, in <module>
+    from tensorflow.python.trackable.data_structures import ListWrapper
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/__init__.py", line 438, in <module>
+    _ll.load_library(_plugin_dir)
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/python/framework/load_library.py", line 151, in load_library
+    py_tf.TF_LoadLibrary(lib)
+tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib, 0x0006): Library not loaded: @rpath/_pywrap_tensorflow_internal.so
+  Referenced from: <8B62586B-B082-3113-93AB-FD766A9960AE> /Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib
+  Reason: tried: '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file), '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file)
+  [FAIL] prepare - see logs/run_20260825_171718.log
+=== efficientnetb0 ===
+  [run ] prepare
+/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+backbone: efficientnetb0 @ 224px -> artifacts/efficientnetb0
+manifest: 9869 images, 20 camera-directions, 2023-12-22 -> 2026-01-02
+
+split sizes:
+class_3  high  light  no_traffic
+split                           
+test      104    557         750
+train    1108   2659        2313
+val       581    789        1008
+Traceback (most recent call last):
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 184, in <module>
+    main()
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 154, in main
+    import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/__init__.py", line 7, in <module>
+    from keras import _tf_keras as _tf_keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/__init__.py", line 1, in <module>
+    from keras._tf_keras import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/keras/__init__.py", line 7, in <module>
+    from keras import activations as activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/activations/__init__.py", line 7, in <module>
+    from keras.src.activations import deserialize as deserialize
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/__init__.py", line 1, in <module>
+    from keras.src import activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/__init__.py", line 3, in <module>
+    from keras.src.activations.activations import celu
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/activations.py", line 1, in <module>
+    from keras.src import backend
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/__init__.py", line 10, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/__init__.py", line 2, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/dtypes.py", line 5, in <module>
+    from keras.src.backend.common.variables import standardize_dtype
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/variables.py", line 11, in <module>
+    from keras.src.utils.module_utils import tensorflow as tf
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/__init__.py", line 1, in <module>
+    from keras.src.utils.audio_dataset_utils import audio_dataset_from_directory
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/audio_dataset_utils.py", line 4, in <module>
+    from keras.src.utils import dataset_utils
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/dataset_utils.py", line 9, in <module>
+    from keras.src import tree
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/__init__.py", line 1, in <module>
+    from keras.src.tree.tree_api import assert_same_paths
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/tree_api.py", line 8, in <module>
+    from keras.src.tree import optree_impl as tree_impl
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/optree_impl.py", line 13, in <module>
+    from tensorflow.python.trackable.data_structures import ListWrapper
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/__init__.py", line 438, in <module>
+    _ll.load_library(_plugin_dir)
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/python/framework/load_library.py", line 151, in load_library
+    py_tf.TF_LoadLibrary(lib)
+tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib, 0x0006): Library not loaded: @rpath/_pywrap_tensorflow_internal.so
+  Referenced from: <8B62586B-B082-3113-93AB-FD766A9960AE> /Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib
+  Reason: tried: '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file), '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file)
+  [FAIL] prepare - see logs/run_20260825_171718.log
+=== resnet50 ===
+  [run ] prepare
+/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+backbone: resnet50 @ 224px -> artifacts/resnet50
+manifest: 9869 images, 20 camera-directions, 2023-12-22 -> 2026-01-02
+
+split sizes:
+class_3  high  light  no_traffic
+split                           
+test      104    557         750
+train    1108   2659        2313
+val       581    789        1008
+Traceback (most recent call last):
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 184, in <module>
+    main()
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 154, in main
+    import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/__init__.py", line 7, in <module>
+    from keras import _tf_keras as _tf_keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/__init__.py", line 1, in <module>
+    from keras._tf_keras import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/keras/__init__.py", line 7, in <module>
+    from keras import activations as activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/activations/__init__.py", line 7, in <module>
+    from keras.src.activations import deserialize as deserialize
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/__init__.py", line 1, in <module>
+    from keras.src import activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/__init__.py", line 3, in <module>
+    from keras.src.activations.activations import celu
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/activations.py", line 1, in <module>
+    from keras.src import backend
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/__init__.py", line 10, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/__init__.py", line 2, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/dtypes.py", line 5, in <module>
+    from keras.src.backend.common.variables import standardize_dtype
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/variables.py", line 11, in <module>
+    from keras.src.utils.module_utils import tensorflow as tf
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/__init__.py", line 1, in <module>
+    from keras.src.utils.audio_dataset_utils import audio_dataset_from_directory
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/audio_dataset_utils.py", line 4, in <module>
+    from keras.src.utils import dataset_utils
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/dataset_utils.py", line 9, in <module>
+    from keras.src import tree
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/__init__.py", line 1, in <module>
+    from keras.src.tree.tree_api import assert_same_paths
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/tree_api.py", line 8, in <module>
+    from keras.src.tree import optree_impl as tree_impl
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/optree_impl.py", line 13, in <module>
+    from tensorflow.python.trackable.data_structures import ListWrapper
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/__init__.py", line 438, in <module>
+    _ll.load_library(_plugin_dir)
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/python/framework/load_library.py", line 151, in load_library
+    py_tf.TF_LoadLibrary(lib)
+tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib, 0x0006): Library not loaded: @rpath/_pywrap_tensorflow_internal.so
+  Referenced from: <8B62586B-B082-3113-93AB-FD766A9960AE> /Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib
+  Reason: tried: '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file), '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file)
+  [FAIL] prepare - see logs/run_20260825_171718.log
+=== mobilenetv2 ===
+  [run ] prepare
+/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+backbone: mobilenetv2 @ 224px -> artifacts/mobilenetv2
+manifest: 9869 images, 20 camera-directions, 2023-12-22 -> 2026-01-02
+
+split sizes:
+class_3  high  light  no_traffic
+split                           
+test      104    557         750
+train    1108   2659        2313
+val       581    789        1008
+Traceback (most recent call last):
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 184, in <module>
+    main()
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/src/prepare.py", line 154, in main
+    import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/__init__.py", line 7, in <module>
+    from keras import _tf_keras as _tf_keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/__init__.py", line 1, in <module>
+    from keras._tf_keras import keras
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/_tf_keras/keras/__init__.py", line 7, in <module>
+    from keras import activations as activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/activations/__init__.py", line 7, in <module>
+    from keras.src.activations import deserialize as deserialize
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/__init__.py", line 1, in <module>
+    from keras.src import activations
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/__init__.py", line 3, in <module>
+    from keras.src.activations.activations import celu
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/activations/activations.py", line 1, in <module>
+    from keras.src import backend
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/__init__.py", line 10, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/__init__.py", line 2, in <module>
+    from keras.src.backend.common.dtypes import result_type
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/dtypes.py", line 5, in <module>
+    from keras.src.backend.common.variables import standardize_dtype
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/backend/common/variables.py", line 11, in <module>
+    from keras.src.utils.module_utils import tensorflow as tf
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/__init__.py", line 1, in <module>
+    from keras.src.utils.audio_dataset_utils import audio_dataset_from_directory
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/audio_dataset_utils.py", line 4, in <module>
+    from keras.src.utils import dataset_utils
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/utils/dataset_utils.py", line 9, in <module>
+    from keras.src import tree
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/__init__.py", line 1, in <module>
+    from keras.src.tree.tree_api import assert_same_paths
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/tree_api.py", line 8, in <module>
+    from keras.src.tree import optree_impl as tree_impl
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/keras/src/tree/optree_impl.py", line 13, in <module>
+    from tensorflow.python.trackable.data_structures import ListWrapper
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/__init__.py", line 438, in <module>
+    _ll.load_library(_plugin_dir)
+  File "/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow/python/framework/load_library.py", line 151, in load_library
+    py_tf.TF_LoadLibrary(lib)
+tensorflow.python.framework.errors_impl.NotFoundError: dlopen(/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib, 0x0006): Library not loaded: @rpath/_pywrap_tensorflow_internal.so
+  Referenced from: <8B62586B-B082-3113-93AB-FD766A9960AE> /Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/libmetal_plugin.dylib
+  Reason: tried: '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file), '/Users/unamrdja/Documents/mlops/border-traffic-density/env/lib/python3.9/site-packages/tensorflow-plugins/../_solib_darwin_arm64/_U@local_Uconfig_Utf_S_S_C_Upywrap_Utensorflow_Uinternal___Uexternal_Slocal_Uconfig_Utf/_pywrap_tensorflow_internal.so' (no such file)
+  [FAIL] prepare - see logs/run_20260825_171718.log
+=== comparison ===
+no results found under artifacts/*/run_3cls/

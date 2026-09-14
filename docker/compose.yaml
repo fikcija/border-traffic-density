@@ -1,0 +1,88 @@
+# Two services:
+#
+#   app     supervisord -> prefect server (:4200) + flow runner + FastAPI (:8000)
+#   mlflow  tracking server and model registry (:5001 on the host)
+#
+#   docker compose -f docker/compose.yaml up -d --build
+#
+# MLflow stays a separate service because it is a third-party server, not our code -
+# bundling someone else's server into the application image buys nothing.
+#
+# No Docker socket is mounted. The flow imports the pipeline directly, so there are
+# no sibling containers to start and no host-path translation to get wrong.
+
+name: border-traffic
+
+services:
+  mlflow:
+    build: { context: .., dockerfile: docker/mlflow.Dockerfile }
+    # Host 5001, not 5000: macOS AirPlay Receiver occupies 5000 and the bind fails.
+    # Inside the network the service is still http://mlflow:5000.
+    ports: ["${MLFLOW_PORT:-5001}:5000"]
+    volumes: [mlflow-store:/mlflow]
+    command: >
+      mlflow server
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --artifacts-destination /mlflow/artifacts
+      --serve-artifacts
+      --host 0.0.0.0 --port 5000
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  app:
+    build: { context: .., dockerfile: docker/app.Dockerfile }
+    ports:
+      - "4200:4200"      # Prefect UI
+      - "8000:8000"      # inference API
+    volumes:
+      - ../data:/app/data:ro
+      - ../artifacts:/app/artifacts
+      - prefect-data:/root/.prefect
+      # User accounts and the prediction log. Its own volume because ../data is
+      # mounted read-only and the artifacts bind mount is the pipeline's workspace,
+      # not a place for serving state.
+      - serve-data:/app/serve-data
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      PREFECT_API_URL: http://127.0.0.1:4200/api
+      MODEL_NAME: border-traffic-density
+      MODEL_ALIAS: production
+      LABELS: no_traffic,light,high
+      INPUT_SIZE: "224"
+      # Promotion is a SELECTION decision, so it compares validation scores. Test is
+      # spent once, on reporting. Set to test_macro_f1 only with that trade-off in mind.
+      GATE_METRIC: ${GATE_METRIC:-val_macro_f1}
+      GATE_MARGIN: ${GATE_MARGIN:-0.0}
+      # Accuracy is not enough on its own: a candidate must also hold on to half its
+      # clean score under the worst perturbation, and not be less robust than the
+      # model it would replace.
+      ROBUSTNESS_MIN_RETENTION: ${ROBUSTNESS_MIN_RETENTION:-0.50}
+      ROBUSTNESS_REGRESSION_TOLERANCE: ${ROBUSTNESS_REGRESSION_TOLERANCE:-0.02}
+      TRAIN_CRON: ${TRAIN_CRON:-0 3 * * 1}
+      API_URL: http://127.0.0.1:8000
+      # --- serving: auth, storage and limits -------------------------------
+      SERVE_DB_PATH: /app/serve-data/serve.db
+      # No default on purpose. Unset means the API generates an ephemeral signing
+      # key at startup and says so - tokens then stop working across a restart,
+      # which is visible and harmless. A default here would ship one forgeable
+      # secret to every deployment that forgot to override it.
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_TTL_MINUTES: ${JWT_TTL_MINUTES:-60}
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-10485760}
+      MAX_BATCH_FILES: ${MAX_BATCH_FILES:-32}
+      # Unset leaves POST /reload open, which is what the in-container orchestrator
+      # expects. Set it on both sides to close that endpoint off.
+      RELOAD_TOKEN: ${RELOAD_TOKEN:-}
+    depends_on:
+      mlflow: { condition: service_healthy }
+    restart: unless-stopped
+
+volumes:
+  mlflow-store:
+  prefect-data:
+  serve-data:

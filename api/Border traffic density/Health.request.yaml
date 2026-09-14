@@ -1,0 +1,7 @@
+$kind: http-request
+description: Open. 503 until a model is loaded. Lists the cameras this model covers.
+url: "{{baseUrl}}/health"
+method: GET
+auth:
+  type: noauth
+order: 1000

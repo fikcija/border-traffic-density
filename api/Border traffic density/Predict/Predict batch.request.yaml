@@ -1,0 +1,19 @@
+$kind: http-request
+description: Up to MAX_BATCH_FILES (32) images. A bad file fails in its own slot rather than the whole batch, so the status stays 200. 10/minute.
+url: "{{baseUrl}}/predict/batch"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: files
+      src: []
+    - type: file
+      key: files
+      src: []
+    - type: text
+      key: camera
+      value: HORGOS_I
+      description: Applies to every image when set; otherwise each filename supplies its own.
+      disabled: true
+order: 2000

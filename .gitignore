@@ -1,0 +1,10 @@
+data/
+artifacts/
+env/
+__pycache__/
+*.pyc
+*.zip
+_local/
+.DS_Store
+.postman/
+postman/

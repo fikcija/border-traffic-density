@@ -1,0 +1,17 @@
+$kind: http-request
+description: One image, one prediction. 60/minute.
+url: "{{baseUrl}}/predict"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src: []
+      description: A border-camera JPEG. Max MAX_UPLOAD_BYTES (10 MiB).
+    - type: text
+      key: camera
+      value: HORGOS_I
+      description: Optional when the filename is CAMERA_DIR__...
+      disabled: true
+order: 1000

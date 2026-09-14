@@ -1,0 +1,14 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+pillow>=10.0
+numpy>=1.24
+# prepare.py imports pandas at module level for the training paths. Kept so the
+# serving container runs byte-identical code to training.
+pandas>=2.0
+tflite-runtime>=2.14
+# client only - no server or UI dependencies
+mlflow-skinny>=2.14,<3
+# auth and rate limiting
+pyjwt>=2.8
+slowapi>=0.1.9

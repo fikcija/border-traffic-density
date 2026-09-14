@@ -1,0 +1,25 @@
+$kind: http-request
+description: Creates an account and returns a token, which this request saves to the `token` variable. 409 if the name is taken. 5/minute.
+url: "{{baseUrl}}/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      const b = pm.response.json();
+      if (b.access_token) {
+        pm.collectionVariables.set('token', b.access_token);
+        console.log('token saved, expires in ' + b.expires_in + 's');
+      }
+    language: text/javascript
+order: 1000

@@ -1,0 +1,25 @@
+$kind: http-request
+description: Exchanges credentials for a token and saves it to the `token` variable. 10/minute.
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      const b = pm.response.json();
+      if (b.access_token) {
+        pm.collectionVariables.set('token', b.access_token);
+        console.log('token saved, expires in ' + b.expires_in + 's');
+      }
+    language: text/javascript
+order: 2000

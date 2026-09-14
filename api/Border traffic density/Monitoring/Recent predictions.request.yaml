@@ -1,0 +1,16 @@
+$kind: http-request
+description: Newest first. Shared across users - this is a view of what the model is doing, not a per-account log. 30/minute.
+url: "{{baseUrl}}/predictions?limit=50&offset=0"
+method: GET
+queryParams:
+  - key: limit
+    value: "50"
+  - key: offset
+    value: "0"
+  - key: camera
+    value: HORGOS_I
+    disabled: true
+  - key: prediction
+    value: high
+    disabled: true
+order: 1000

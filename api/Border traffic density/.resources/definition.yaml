@@ -1,0 +1,28 @@
+$kind: collection
+description: |
+  Border traffic density classifier - REST serving.
+
+  Classifies a border-camera image as `no_traffic`, `light` or `high`. The model is
+  resolved from the MLflow registry at startup (whichever version carries the
+  `production` alias), so deploying a new one is an alias change plus `POST /reload`.
+
+  **Authentication.** Register or log in, then send the returned JWT as
+  `Authorization: Bearer <token>`. Tokens expire after `JWT_TTL_MINUTES` (default 60).
+
+  **Cameras.** The model is ROI-masked per camera and is *wrong* on whole frames, so
+  `camera` must name one of the configured crossings - `GET /health` lists them. It may
+  be omitted when the filename follows the `CAMERA_DIR__...` dataset convention.
+
+  **Rate limits** are per client IP; the limit is noted on each endpoint.
+variables:
+  baseUrl: http://localhost:8000
+  username: marko
+  password: change-me-a-long-password
+  token: ""
+  reloadToken: ""
+auth:
+  - id: 318d566b-f961-4a49-8d76-65b0f423e510
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{token}}"

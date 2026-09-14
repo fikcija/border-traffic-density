@@ -1,0 +1,11 @@
+$kind: http-request
+description: Re-resolves the production alias. Open unless RELOAD_TOKEN is set on the server, in which case enable the X-Reload-Token header.
+url: "{{baseUrl}}/reload"
+method: POST
+headers:
+  - key: X-Reload-Token
+    value: "{{reloadToken}}"
+    disabled: true
+auth:
+  type: noauth
+order: 5000

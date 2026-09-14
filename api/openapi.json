@@ -1,0 +1,609 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Border traffic density",
+    "version": "2.0",
+    "description": "Border traffic density classifier - REST serving.\n\nClassifies a border-camera image as `no_traffic`, `light` or `high`. The model is\nresolved from the MLflow registry at startup (whichever version carries the\n`production` alias), so deploying a new one is an alias change plus `POST /reload`.\n\n**Authentication.** Register or log in, then send the returned JWT as\n`Authorization: Bearer <token>`. Tokens expire after `JWT_TTL_MINUTES` (default 60).\n\n**Cameras.** The model is ROI-masked per camera and is *wrong* on whole frames, so\n`camera` must name one of the configured crossings - `GET /health` lists them. It may\nbe omitted when the filename follows the `CAMERA_DIR__...` dataset convention.\n\n**Rate limits** are per client IP; the limit is noted on each endpoint.\n"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "description": "Open by design - docker's healthcheck and healthcheck.sh both poll it.\n\nReturns 503 until a model is loaded so that an API which is up but cannot serve\nreads as unhealthy rather than as ok.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "status": "ok",
+                  "model": {
+                    "source": "registry",
+                    "version": "2",
+                    "run_id": "6f22630c318d4d10831d205f0c9d2965",
+                    "model": "model_int8.tflite"
+                  },
+                  "cameras": [
+                    "BATROVCI_I",
+                    "BATROVCI_U",
+                    "HORGOS_I",
+                    "RACA_U"
+                  ],
+                  "labels": [
+                    "no_traffic",
+                    "light",
+                    "high"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Register",
+        "operationId": "register_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "username": "marko",
+                  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "token_type": "bearer",
+                  "expires_at": "2026-09-14T17:00:00+00:00",
+                  "expires_in": 3600
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n**Rate limit:** 5/minute per client IP."
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Credentials"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "username": "marko",
+                  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+                  "token_type": "bearer",
+                  "expires_at": "2026-09-14T17:00:00+00:00",
+                  "expires_in": 3600
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n**Rate limit:** 10/minute per client IP."
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Me",
+        "operationId": "me_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "username": "marko"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Predict",
+        "description": "One image in, class probabilities out.\n\n`camera` selects the ROI polygon. If omitted it is read from the filename\nprefix before '__', the convention the dataset uses. There is no sensible\ndefault: lane geometry is camera-specific and guessing it produces a\nconfidently wrong answer rather than an error.\n\n**Rate limit:** 60/minute per client IP.",
+        "operationId": "predict_predict_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_predict_predict_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "camera": "HORGOS_I",
+                  "prediction": "high",
+                  "confidence": 0.9922,
+                  "probabilities": {
+                    "no_traffic": 0.0,
+                    "light": 0.0078,
+                    "high": 0.9922
+                  },
+                  "latency_ms": 13.4
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/predict/batch": {
+      "post": {
+        "summary": "Predict Batch",
+        "description": "Several images in one request.\n\nA per-image failure is reported in that image's slot rather than failing the\nwhole batch: scoring a backlog of frames should not be defeated by one corrupt\nfile halfway through. Every item therefore carries either a prediction or an\nerror, and the HTTP status stays 200 as long as the request itself was valid.\n\n`camera` applies to every image when given; otherwise each filename supplies its\nown, which is what makes a mixed-camera upload work.\n\n**Rate limit:** 10/minute per client IP.",
+        "operationId": "predict_batch_predict_batch_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_predict_batch_predict_batch_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "batch_id": "6f9eece72462",
+                  "total": 2,
+                  "succeeded": 1,
+                  "failed": 1,
+                  "results": [
+                    {
+                      "index": 0,
+                      "filename": "HORGOS_I__a.jpg",
+                      "camera": "HORGOS_I",
+                      "prediction": "high",
+                      "confidence": 0.9922,
+                      "probabilities": {
+                        "no_traffic": 0.0,
+                        "light": 0.0078,
+                        "high": 0.9922
+                      },
+                      "latency_ms": 12.1
+                    },
+                    {
+                      "index": 1,
+                      "filename": "broken.jpg",
+                      "error": "not a readable image",
+                      "status": 400
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/predictions": {
+      "get": {
+        "summary": "Predictions",
+        "description": "Recent served predictions, newest first.\n\nThe log is shared rather than per-user: it exists to observe what the model is\ndoing in production, which is not a per-account view.\n\n**Rate limit:** 30/minute per client IP.",
+        "operationId": "predictions_predictions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "camera",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Camera"
+            }
+          },
+          {
+            "name": "prediction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Prediction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "limit": 2,
+                  "offset": 0,
+                  "predictions": [
+                    {
+                      "id": 5,
+                      "ts": "2026-09-14T15:58:12+00:00",
+                      "username": "marko",
+                      "camera": "RACA_U",
+                      "prediction": "no_traffic",
+                      "confidence": 0.332,
+                      "probabilities": {
+                        "no_traffic": 0.332,
+                        "light": 0.3359,
+                        "high": 0.332
+                      },
+                      "latency_ms": 6.2,
+                      "model_version": "2",
+                      "model_source": "registry",
+                      "filename": "RACA_U__b.jpg",
+                      "batch_id": "6f9eece72462"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/predictions/stats": {
+      "get": {
+        "summary": "Predictions Stats",
+        "description": "Class distribution, confidence and latency over everything served so far.\n\nCompare `by_class` shares against the training mix: the model was fitted on\nroughly 41% no_traffic / 41% light / 18% high, so a production distribution far\nfrom that is either genuine traffic change or drift worth investigating.\n\n**Rate limit:** 30/minute per client IP.",
+        "operationId": "predictions_stats_predictions_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "total": 5,
+                  "mean_confidence": 0.8609,
+                  "mean_latency_ms": 7.5,
+                  "first_seen": "2026-09-14T15:58:10+00:00",
+                  "last_seen": "2026-09-14T15:58:12+00:00",
+                  "by_class": [
+                    {
+                      "prediction": "high",
+                      "n": 4,
+                      "mean_confidence": 0.9931,
+                      "share": 0.8
+                    },
+                    {
+                      "prediction": "no_traffic",
+                      "n": 1,
+                      "mean_confidence": 0.332,
+                      "share": 0.2
+                    }
+                  ],
+                  "by_camera": [
+                    {
+                      "camera": "HORGOS_I",
+                      "n": 3,
+                      "mean_confidence": 0.9935
+                    },
+                    {
+                      "camera": "RACA_U",
+                      "n": 2,
+                      "mean_confidence": 0.6621
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/reload": {
+      "post": {
+        "summary": "Reload Model",
+        "description": "Pick up a newly promoted registry version without rebuilding or restarting.\n\nCalled by the orchestrator after it moves the production alias. Rollback uses\nthe same path: move the alias back, reload.\n\nLeft open when RELOAD_TOKEN is unset so the existing reload_api task keeps\nworking untouched; set RELOAD_TOKEN on both sides to close it.",
+        "operationId": "reload_model_reload_post",
+        "parameters": [
+          {
+            "name": "x-reload-token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "X-Reload-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "reloaded": true,
+                  "model": {
+                    "source": "registry",
+                    "version": "3",
+                    "run_id": "1dc3d1ad05a745ebaf9927f6dcfc1582",
+                    "model": "model_int8.tflite"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_predict_batch_predict_batch_post": {
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "camera": {
+            "type": "string",
+            "title": "Camera"
+          }
+        },
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "Body_predict_batch_predict_batch_post"
+      },
+      "Body_predict_predict_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "camera": {
+            "type": "string",
+            "title": "Camera"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_predict_predict_post"
+      },
+      "Credentials": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 3,
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Credentials"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "local stack"
+    }
+  ]
+}

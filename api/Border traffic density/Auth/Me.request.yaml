@@ -1,0 +1,5 @@
+$kind: http-request
+description: Who the current token belongs to.
+url: "{{baseUrl}}/auth/me"
+method: GET
+order: 3000

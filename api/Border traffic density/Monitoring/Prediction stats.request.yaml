@@ -1,0 +1,5 @@
+$kind: http-request
+description: Class mix, mean confidence and latency. Compare `by_class` shares against the training mix (~41% no_traffic / 41% light / 18% high) to spot drift. 30/minute.
+url: "{{baseUrl}}/predictions/stats"
+method: GET
+order: 2000
