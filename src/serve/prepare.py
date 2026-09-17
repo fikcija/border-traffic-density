@@ -107,8 +107,6 @@ def build_manifest(data_dir: Path) -> pd.DataFrame:
 
 
 def assign_splits(df: pd.DataFrame, val_start: str, test_start: str) -> pd.DataFrame:
-    """Chronological, per the course guidance. Never random: 18.5% of consecutive
-    frames from one camera are <5 min apart, so a random split leaks near-duplicates."""
     df = df.copy()
     df["split"] = "train"
     df.loc[df.timestamp >= pd.Timestamp(val_start), "split"] = "val"
@@ -123,15 +121,7 @@ def assign_splits(df: pd.DataFrame, val_start: str, test_start: str) -> pd.DataF
 
 
 def load_image(path: str, size: int, roi=None, letterbox=False) -> np.ndarray:
-    """Overlay-mask, optionally ROI-mask/crop, then resize.
 
-    Overlay masking is kept even when ROI is active. The bundle's README says the
-    polygon already excludes the overlay corners, but that was written for its own
-    full-width top/bottom crop. Measured against OVERLAY_BOXES here, every polygon
-    overlaps them - up to 14% of SPILJANI_I's ROI area - so skipping the overlay
-    mask would leave the burned-in clock inside the crop, and date correlates with
-    traffic density.
-    """
     img = Image.open(path).convert("RGB")
     w, h = img.size
     arr = np.array(img, dtype=np.uint8)   # np.asarray on a PIL image is read-only

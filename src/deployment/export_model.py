@@ -38,9 +38,6 @@ def main():
     roi_active = bool(cfg.get("roi_active"))
     letterbox = bool(cfg.get("roi_letterbox"))
 
-    # compile=False drops Adam's optimizer state. It is 2 extra float32 values per
-    # trainable parameter - here ~30 MB of a 54 MB file - and it is only needed to
-    # resume training, never to predict. The recipient does not want to download it.
     head = keras.models.load_model(run_dir / "model.keras", compile=False)
     already_full = tuple(head.input_shape[1:]) == (size, size, 3)
     out_path = run_dir / "model_full.keras"

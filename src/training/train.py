@@ -21,7 +21,7 @@ INK, MUTED, GRID = "#1c1c1a", "#6b6b66", "#e4e4e1"
 
 # ---------------------------------------------------------------- baselines
 def baselines(y_train, y_test, n_classes, rng):
-    """Zero rule and label-distribution random. Metrics mean nothing without these."""
+    #Zero rule and label-distribution random.
     from sklearn.metrics import f1_score, accuracy_score
     counts = np.bincount(y_train, minlength=n_classes)
     out = {}
